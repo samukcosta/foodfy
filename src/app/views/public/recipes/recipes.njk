@@ -1,0 +1,48 @@
+{% extends "public/layout.njk" %}
+
+{% block filter %}
+<form class="filter" action="/foodfy/recipes" method="get" >
+    <input type="text" name="filter" placeholder="Buscar uma receita" value={{filter}}>
+    <button class="filterButton">Buscar</button>
+</form>
+{% endblock filter %}
+
+{% block content %}
+{% if filter %}
+<h1 class="filterRecipes">Buscando por <i>"{{filter}}"</i></h1>
+{% endif %}
+
+<section id = "page_recipes" {% if filter %}class="recipes card_recipe_filter" {%else%}class="recipes"{% endif %}>
+    {% for recipe in recipes %}
+        <div class="recipe" id="{{recipe.id}}">
+            <div class="recipe_img">
+                <img src="{{recipe.image}}" alt="Imagem do {{recipe.title}}">
+            </div>
+            <div class="recipe_content">
+                <p>{{recipe.title}}</p>
+            </div>
+            <div class="chef_recipe">
+                <p>por {{recipe.name}}</p>
+            </div>
+        </div>
+    {% endfor %}
+    
+</section>
+{% endblock content %}
+
+{% block modal %}
+<div class="modal_overlay">
+    <div class="modal">
+        <img class="img_modal" src="" alt="">
+        <div class="modal_content">
+            <p class="text_content"></p>
+        </div>
+        <div class="modal_chef">
+            <p class="chef"></p>
+        </div>
+        <div class="close_modal">
+            <a>Fechar modal</a>
+        </div>
+    </div>
+</div>
+{% endblock modal %}

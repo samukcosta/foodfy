@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>Foodfy</title>
+        <link rel="stylesheet" href="/styles.css">
+    </head>
+
+    <body>
+        <header class="logoAdmin">
+            <img src="/_img/logo_admin.png" alt="Logo Foodfy">
+            <a href="/admin/recipes">RECEITAS</a>
+            <a href="/admin/chefs">CHEFS</a>
+        </header>
+        <div class="mainAdmin">
+            {% block content %}
+            {% endblock content %}
+        </div>
+
+        <script src="/scripts.js"></script>
+    </body>
+</html>
