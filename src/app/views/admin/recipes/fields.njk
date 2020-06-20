@@ -2,7 +2,18 @@
 <div class="itemRecipe">
     <div class="titleCreated">Imagem da receita</div>
     <div>
-        <input type="url" name="image" placeholder="http://" value="{{recipe.image}}">
+        <div id="add-img">
+            <div>
+                <input id="img-input" type="file" name="image" multiple accept="image/*">
+            </div>
+            <div>
+                <span class="material-icons">add</span>
+            </div>
+        </div>
+
+        <div class="img-preview">
+        
+        </div>
     </div>
 </div>
 
