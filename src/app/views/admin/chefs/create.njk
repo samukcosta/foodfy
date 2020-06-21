@@ -9,6 +9,17 @@
         <p>Nome</p>
         <input type="text" name="name">
         <p>Avatar</p>
-        <input type="url" name="avatar_url">
+        <div id="add-img-avatar">
+            <input 
+                id="avatar_img" 
+                type="file" 
+                name="image" 
+                multiple 
+                accept="image/*" 
+                
+                onchange="ImgUpload.handleFileInput(event)"
+            >
+            <p>Enviar Avatar</p>
+        </div>
     </form>
 {% endblock content %}
