@@ -11,8 +11,6 @@ const menuPublic = document.querySelectorAll(".links a")
 const add_preparation = document.querySelector(".add-preparation")
 const add_Ingredient = document.querySelector(".add-ingredient")
 
-console.log(menuPublic)
-
 
 for (menu of menuAdmin){
     if (currentPage.includes(menu.getAttribute("href"))){
@@ -30,7 +28,6 @@ for (let recipe of recipes){
         window.location.href = `/foodfy/recipes/${recipeId}`
     })
 }
-
 
 function addIngredient() {
     const ingredients = document.querySelector("#ingredients");
@@ -60,8 +57,6 @@ function addPreparation() {
   newField.children[0].value = "";
   preparations.appendChild(newField);
 }
-
-
 
 if (showIng){
     showIng.addEventListener("click", function(){
@@ -101,4 +96,109 @@ if (add_Ingredient) {
 }
 if (add_preparation) {
     document.querySelector(".add-preparation").addEventListener("click", addPreparation)
+}
+
+const ImgUpload = {
+    input: "",
+    preview: document.querySelector('#img-preview'),
+    uploadLimit: 5,
+    files: [],
+    handleFileInput(event){
+        const {files: fileList} = event.target
+        ImgUpload.input = event.target
+
+        if(ImgUpload.hasLimit(event)) return
+
+        Array.from(fileList).forEach((file) => {
+            ImgUpload.files.push(file)
+
+            const reader = new FileReader()
+
+            reader.onload = () => {
+                const image = new Image()
+                image.src = String(reader.result)
+
+                console.log(image)
+                const div = ImgUpload.getContainer(image)
+
+                console.log(div)
+
+                ImgUpload.preview.appendChild(div)
+            }
+
+            reader.readAsDataURL(file)
+
+        })
+        
+    },
+    hasLimit(event){
+        const {uploadLimit, input, preview} = ImgUpload
+        const {files: fileList} = input
+
+        if (fileList.length > uploadLimit) {
+            alert(`Envie no máximo ${uploadLimit} imagens`)
+            event.preventDefault()
+            return true
+        }
+
+        const photosDiv = []
+        preview.childNodes.forEach(item => {
+            if (item.classList && item.classList.value == "image") {
+                photosDiv.push(item)
+            }
+        })
+
+        const totalPhotos = fileList.length + photosDiv.length
+        if (totalPhotos > uploadLimit) {
+            alert("Você atingiu o limite máximo de fotos")
+            event.preventDefault()
+            return true
+        }
+    },
+    getAllFiles(){
+        const dataTransfer = new ClipboardEvent("").clipboardData || new DataTransfer()
+
+        ImgUpload.files.forEach(file => dataTransfer.items.add(file))
+
+        return dataTransfer.files
+    },
+    getContainer(image){
+        const container = document.createElement('div')
+        container.classList.add('image')
+
+        container.onclick = ImgUpload.removePhoto
+
+        container.appendChild(image)
+
+        container.appendChild(ImgUpload.getRemoveButton())
+
+        return container
+    },
+    getRemoveButton() {
+        const button = document.createElement('span')
+        button.classList.add('material-icons')
+        button.innerHTML = "close"
+        return button
+    },
+    removePhoto(event){
+        const photoDiv = event.target.parentNode
+        const photosArray = Array.from(ImgUpload.preview.children)
+        const index = photosArray.indexOf(photoDiv)
+
+        ImgUpload.files.splice(index, 1)
+        ImgUpload.input.file = ImgUpload.getAllFiles
+        photoDiv.remove()
+    },
+    removeOldPhoto(event) {
+        const photoDiv = event.target.parentNode
+
+        if (photoDiv.id) {
+            const removedFiles = document.querySelector('input[name="removed_files"]')
+            if (removedFiles) {
+                removedFiles.value += `${photoDiv},`
+            }
+        }
+
+        photoDiv.remove()
+    }
 }
