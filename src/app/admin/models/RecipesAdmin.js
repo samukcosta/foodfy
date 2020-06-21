@@ -2,34 +2,28 @@ const {date, lineBreak} = require("../../../lib/utils")
 const db = require("../../../config/db")
 
 module.exports = {
-    index(callback){
+    index(){
         const query = `SELECT recipes.*, chefs.name AS chef 
         FROM recipes
         LEFT JOIN chefs ON (recipes.pk_chef_id = chefs.id)
         ORDER BY id ASC`
 
-        db.query(query, function(err, results){
-            if (err) throw `Database Error! ${err}`
-
-            callback(results.rows)
-        })
+        return db.query(query)
     },
-    create(data, callback){
+    create(data){
         const query = `INSERT INTO recipes (
             pk_chef_id,
-            image,
             title,
             ingredients,
             preparation,
             information,
             created_at
-        ) VALUES ($1,$2,$3,$4,$5,$6,$7)
+        ) VALUES ($1,$2,$3,$4,$5,$6)
         
         RETURNING id`
 
         const values = [
             data.id_chef,
-            data.image,
             data.title,
             data.ingredients,
             data.preparations,
@@ -37,45 +31,31 @@ module.exports = {
             date(Date.now(data)).iso
         ]
 
-        db.query(query, values, function(err, results){
-            if (err) throw `Database Error! ${err}`
-
-            callback()
-        })
+        return db.query(query, values)
     },
-    teacherSelectOptions(callback){
-        db.query(`SELECT id, name FROM chefs
-        ORDER BY name ASC`, function(err, results){
-            if (err) throw `Database Error! ${err}`
-
-            callback(results.rows)
-        })
+    chefSelectOptions(){
+        return db.query(`SELECT id, name FROM chefs
+        ORDER BY name ASC`)
     },
-    find(id, callback){
+    find(id){
         const query = `SELECT recipes.*, chefs.name AS chef 
         FROM recipes
         LEFT JOIN chefs ON (recipes.pk_chef_id = chefs.id)
         WHERE recipes.id = $1`
 
-        db.query(query, [id], function(err, results){
-            if (err) throw `Database Error! ${err}`
-
-            callback(results.rows[0])
-        })
+        return db.query(query, [id])
     },
-    update(data, callback){
+    update(data){
         query = `UPDATE recipes
         SET pk_chef_id = $1,
-            image = $2,
-            title = $3,
-            ingredients = $4,
-            preparation = $5,
-            information = $6
-        WHERE id = $7`
+            title = $2,
+            ingredients = $3,
+            preparation = $4,
+            information = $5
+        WHERE id = $6`
 
         values = [
             data.id_chef,
-            data.image,
             data.title,
             data.ingredients,
             data.preparations,
@@ -83,17 +63,9 @@ module.exports = {
             data.id
         ]
 
-        db.query(query, values, function(err, results){
-            if (err) throw `Database error! ${err}`
-
-            callback()
-        })
+        return db.query(query, values)
     },
-    delete(id, callback){
-        db.query(`DELETE FROM recipes WHERE id=$1`, [id], function(err, results){
-            if (err) throw `Database error! ${err}`
-
-            callback()
-        })
+    delete(id){
+        return db.query(`DELETE FROM recipes WHERE id=$1`, [id])
     }
 }
