@@ -1,60 +1,112 @@
-const fs = require("fs")
 const RecipesAdmin = require("../models/RecipesAdmin")
+const Files = require("../models/Files")
 const {lineBreak} = require("../../../lib/utils")
 
 /*ADMIN*/
 
 module.exports = {
-    index(req,res){
-        RecipesAdmin.index(function(recipes){
+    async index(req,res){
+        let results = await RecipesAdmin.index()
+        const recipes = results.rows
+
         return res.render('admin/recipes/index', {recipes})
 
-        })
     },
-    create(req,res){
-        RecipesAdmin.teacherSelectOptions(function(chefs){
-            return res.render('admin/recipes/create', {chefs})
-        })
+    async create(req,res){
+        let results = await RecipesAdmin.chefSelectOptions()
+        const chefs = results.rows
+
+        return res.render('admin/recipes/create', {chefs})
+
     },
-    post(req,res){
+    async post(req,res){
 
-        RecipesAdmin.create(req.body, function(){
-            return res.redirect("/admin/recipes")
-        })
+        const keys = Object.keys(req.body)
+
+        for (key of keys) {
+            if (req.body[key] == "") {
+                return res.send("Please, fill all fields")
+            }
+        }
+
+        if (req.files.lenght = 0){
+            return res.send("Please, send at least one image")
+        }
+
+        let results = await RecipesAdmin.create(req.body)
+        const recipeId = results.rows[0].id
+
+        const filesPromise = req.files.map(file => Files.create({
+            ...file
+        }))
+        results = await Promise.all
+        const filesId = results
+        console.log(filesId)
+
+        return res.redirect(`/admin/recipes/${recipeId}`)
+
     },
-    detail(req, res) {
-        const {id} = req.params
+    async detail(req, res) {
 
-        RecipesAdmin.find(id, function(recipe){
-            recipe.information = lineBreak(recipe.information).fh
-            return res.render("admin/recipes/recipeDetail", {recipe})
-        })  
+        results = await RecipesAdmin.find(req.params.id)
+        const recipe = results.rows[0]
+
+        if (!recipe) return res.send("Recipe not found!")
+
+        recipe.information = lineBreak(recipe.information).fh
+
+        return res.render("admin/recipes/recipeDetail", {recipe, chefs})
+
     },
-    edit(req,res){
-        const {id} = req.params
+    async edit(req,res){
 
-        RecipesAdmin.find(id, function(recipe){
-            RecipesAdmin.teacherSelectOptions(function(chefs){
+        let results = await RecipesAdmin.find(req.params.id)
+        const recipe = results.rows[0]
 
-                recipe.information = lineBreak(recipe.information).fu
+        if(!recipe) return res.render("Recipe not find")
 
-                return res.render(`admin/recipes/edit`, {recipe, chefs})
-            })
-        })         
+        results = await RecipesAdmin.chefSelectOptions()
+        chefs = results.rows
+
+        recipe.information = lineBreak(recipe.information).fu
+
+        return res.render(`admin/recipes/edit`, {recipe, chefs})
+         
     },
-    put(req,res){
+    async put(req,res){
+        const keys = Object.keys(req.body)
 
-        const {id} = req.body
+        for (key of keys) {
+            if (req.body[key] == "" && key != "removed_files") {
+                return res.send("Please, fill all fields")
+            }
+        }
+
+        if(req.files.lenght != 0){
+            const newFilesPromise = req.files.map(file => Files.create({
+                ...file
+            }))
+            await Promise.all(newFilesPromise)
+        }
+
+        if (req.body.removed_files) {
+            const removedFiles = req.body.removed_files.split(",")
+            const lastIndex = removedFiles.lenght - 1
+            removedFiles.splice(lastIndex, 1)
+
+            const removedFilesPromise = removedFiles.map(id => Files.delete(id))
+
+            await Promise.all(removedFilesPromise)
+        }
+
+        return res.redirect(`/admin/recipes/${id}`)
+
+    },
+    async delete(req,res){
+        RecipesAdmin.delete(req.body.id)
+
+        return res.redirect("/admin/recipes")
+
         
-        RecipesAdmin.update(req.body, function(){
-            return res.redirect(`/admin/recipes/${id}`)
-        })
-    },
-    delete(req,res){
-        const {id} = req.body
-
-        RecipesAdmin.delete(id, function(){
-            return res.redirect("/admin/recipes")
-        })
     }
 }
