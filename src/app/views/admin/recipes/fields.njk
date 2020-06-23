@@ -10,7 +10,7 @@
                 multiple 
                 accept="image/*" 
                 
-                onchange="ImgUpload.handleFileInput(event)"
+                onchange="ImgRecipeUpload.handleFileInput(event)"
             >
             <span class="material-icons">add</span>
         </div>
@@ -21,7 +21,7 @@
                     <div class="image" id="{{image.id}}">
                         <img src="{{image.src}}" alt="{{image.name}}">
                         <span class="material-icons"
-                            onclick="ImgUpload.removeOldPhoto(event)"
+                            onclick="ImgRecipeUpload.removeOldPhoto(event)"
                         >close</span>
                     </div>
                 {% endfor %}
