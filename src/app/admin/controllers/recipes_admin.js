@@ -1,5 +1,6 @@
 const RecipesAdmin = require("../models/RecipesAdmin")
 const Files = require("../models/Files")
+const Recipe_Files = require("../models/Recipe_Files")
 const {lineBreak} = require("../../../lib/utils")
 
 /*ADMIN*/
@@ -24,24 +25,26 @@ module.exports = {
         const keys = Object.keys(req.body)
 
         for (key of keys) {
-            if (req.body[key] == "") {
+            if (req.body[key] == "" && (!req.body[key].information) ) {
                 return res.send("Please, fill all fields")
             }
         }
 
-        if (req.files.lenght = 0){
+        if (req.files.lenght == 0){
             return res.send("Please, send at least one image")
         }
 
         let results = await RecipesAdmin.create(req.body)
         const recipeId = results.rows[0].id
 
-        const filesPromise = req.files.map(file => Files.create({
-            ...file
-        }))
-        results = await Promise.all
-        const filesId = results
-        console.log(filesId)
+        const filesPromise = req.files.map(file => {
+            Files.create(
+                {...file},
+                recipeId
+                )
+        })
+
+        Promise.all(filesPromise)
 
         return res.redirect(`/admin/recipes/${recipeId}`)
 
@@ -54,6 +57,8 @@ module.exports = {
         if (!recipe) return res.send("Recipe not found!")
 
         recipe.information = lineBreak(recipe.information).fh
+
+        const chefs = "" //COLOCAR O CHEFE AQUI
 
         return res.render("admin/recipes/recipeDetail", {recipe, chefs})
 
