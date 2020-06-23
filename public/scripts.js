@@ -98,7 +98,7 @@ if (add_preparation) {
     document.querySelector(".add-preparation").addEventListener("click", addPreparation)
 }
 
-const ImgUpload = {
+const ImgRecipeUpload = {
     input: "",
     preview: document.querySelector('#img-preview'),
     uploadLimit: 5,
@@ -118,10 +118,7 @@ const ImgUpload = {
                 const image = new Image()
                 image.src = String(reader.result)
 
-                console.log(image)
                 const div = ImgUpload.getContainer(image)
-
-                console.log(div)
 
                 ImgUpload.preview.appendChild(div)
             }
@@ -129,11 +126,12 @@ const ImgUpload = {
             reader.readAsDataURL(file)
 
         })
+
+        ImgUpload.input.files = ImgUpload.getAllFiles()
         
     },
     hasLimit(event){
-        const {uploadLimit, input, preview} = ImgUpload
-        const {files: fileList} = input
+        const {uploadLimit, input: fileList, preview} = ImgUpload
 
         if (fileList.length > uploadLimit) {
             alert(`Envie no máximo ${uploadLimit} imagens`)
@@ -154,6 +152,8 @@ const ImgUpload = {
             event.preventDefault()
             return true
         }
+
+        return false
     },
     getAllFiles(){
         const dataTransfer = new ClipboardEvent("").clipboardData || new DataTransfer()
@@ -186,7 +186,7 @@ const ImgUpload = {
         const index = photosArray.indexOf(photoDiv)
 
         ImgUpload.files.splice(index, 1)
-        ImgUpload.input.file = ImgUpload.getAllFiles
+        ImgUpload.input.files = ImgUpload.getAllFiles()
         photoDiv.remove()
     },
     removeOldPhoto(event) {
@@ -195,7 +195,7 @@ const ImgUpload = {
         if (photoDiv.id) {
             const removedFiles = document.querySelector('input[name="removed_files"]')
             if (removedFiles) {
-                removedFiles.value += `${photoDiv},`
+                removedFiles.value += `${photoDiv,id},`
             }
         }
 
