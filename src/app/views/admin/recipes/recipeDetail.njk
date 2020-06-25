@@ -6,8 +6,34 @@
         <a href="/admin/recipes/{{recipe.id}}/edit">Editar receita</a>
     </div>
 
-    <div class="imgRecipe">
-        <img src={{recipe.image}} alt="Imagem do {{recipe.title}}">
+    <div class="container_img">
+        <div class="imgRecipe">
+            {% if not files %}
+                <img src="http://placehold.it/500x500?text=PRODUTO SEM FOTO" alt="SEM FOTO">
+            {%else%}
+                <img src="{{files[0].src}}" alt="{{files[0].name}}" onclick="Lightbox.open()">
+            {% endif %}
+            <div class="lightbox-target">
+                    <img src="{{files[0].src}}" alt="{{files[0].name}}">
+                    <a href="#" class="lightbox-close" onclick="Lightbox.close()">
+                        <span class="material-icons">close</span>
+                    </a>
+                </div>
+        </div>
+        <div class="gallery-preview">
+            {% for image in files %}
+                <img 
+                    src="{{image.src}}" 
+                    alt="{{image.name}}"
+                    {%if loop.index0 == 0 %}
+                        class="active"
+                    {%endif%}  
+                    onclick = "ImageGallery.setImage(event)"  
+                >
+            {% endfor %}
+
+        </div>
+
     </div>
 
     <div class="title">

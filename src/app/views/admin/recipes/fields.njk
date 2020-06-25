@@ -18,7 +18,7 @@
         <div id="img-preview">
             {% if files %}
                 {% for image in files %}
-                    <div class="image" id="{{image.id}}">
+                    <div class="image" id="{{image.id_files}}">
                         <img src="{{image.src}}" alt="{{image.name}}">
                         <span class="material-icons"
                             onclick="ImgRecipeUpload.removeOldPhoto(event)"

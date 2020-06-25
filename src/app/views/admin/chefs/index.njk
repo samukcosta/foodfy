@@ -10,7 +10,7 @@
     <section class="chefs">
         {% for chef in chefs %}
         <div class="card_chefs">
-            <img src="{{chef.avatar_url}}" alt="Imagem do/da chefe {{chef.name}}">
+            <img src="{{chef.src}}" alt="Imagem do/da chefe {{chef.name}}">
             <div>
                 <p>{{chef.name}}</p>
                 <a href="/admin/chefs/{{chef.id}}">Visualizar</a>

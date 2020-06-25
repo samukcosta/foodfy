@@ -11,14 +11,14 @@
         {% for recipe in recipes %}
             <div class="recipeAdmin" id="{{recipe.id}}">
                 <div class="recipe_img_admin">
-                    <img src={{recipe.image}} alt="Imagem do {{recipe.title}}">
+                    <img src={{recipe.src}} alt="Imagem do {{recipe.title}}">
                 </div>
                 <div class="content">
                     <div class="recipe_content_admin">
                         <p>{{recipe.title}}</p>
                     </div>
                     <div class="chef_recipe_admin">
-                        <p>por {{recipe.chef}}</p>
+                        <p>por {{recipe.name}}</p>
                     </div>
                     <div>
                         <a href="/admin/recipes/{{recipe.id}}">Visualizar</a>
