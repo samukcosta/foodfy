@@ -552,12 +552,14 @@ button[type="submit"]{
     object-fit: cover;
 }
 
-.itemRecipe #img-preview .image {
+.itemRecipe #img-preview .image,
+#img-avatar-preview .avatar_img {
     position: relative;
     margin-left: 10px;
 }
 
-.itemRecipe #img-preview .image span {
+.itemRecipe #img-preview .image span,
+#img-avatar-preview .avatar_img span {
     position: absolute;
     top: 0;
     left: 0;
@@ -574,8 +576,14 @@ button[type="submit"]{
     opacity: 0;
 }
 
-.itemRecipe #img-preview .image:hover span {
+.itemRecipe #img-preview .image:hover span,
+#img-avatar-preview .avatar_img:hover span {
     opacity: 1;
+}
+
+#container-img {
+    display: flex;
+    align-items: center;
 }
 
 #add-img-avatar p {
@@ -601,6 +609,25 @@ button[type="submit"]{
     height: 100%;
     opacity: 0;
     cursor: pointer;
+}
+
+#img-avatar-preview {
+    width: 300px;
+    margin: 8px 64px;
+}
+
+#img-avatar-preview img {
+    width: 164px;
+    height: 164px;
+    border-radius: 50%;
+    object-fit: cover;
+    object-position: center;
+}
+
+#img-avatar-preview .avatar_img span{
+    width: 164px;
+    height: 164px;
+    border-radius: 50%;
 }
 
 #ingredients input {
@@ -655,16 +682,90 @@ select {
     cursor: pointer;
 }
 
+.container_img {
+    width: 100%;
+}
+
+.imgRecipe > img {
+    width: 100%;
+    height: 280px;
+    object-fit: none;
+    object-position: 50% 50%;
+    border: 1px solid #efefef;
+    cursor: zoom-in;
+}
 
 .imgRecipe {
-    padding-bottom: 50px;
+    padding-bottom: 8px;
 }
 
 .imgRecipe img {
     min-width: 100%;
     height: 280px;
+    object-fit: cover;
     border-radius: 15px;
     
+}
+
+.gallery-preview {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.gallery-preview img {
+    height: 50px;
+    width: 50px;
+    margin-left: 10px;
+    object-fit: cover;
+    opacity: 0.6;
+    cursor: pointer;
+    transition: 200ms;
+    border-radius: 3.5px;
+}
+
+.gallery-preview img:hover,
+.gallery-preview img.active {
+    opacity: 1;
+}
+
+.imgRecipe .lightbox-target{
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    overflow: hidden;
+    z-index: 100;
+    top: -100%;
+    left: 0;
+    opacity: 0;
+    transition: opacity 400ms;
+}
+
+.imgRecipe .lightbox-target img {
+    margin: auto;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.3);
+    width: 90%;
+    height: 90%;
+    object-fit: contain;
+}
+
+.imgRecipe a.lightbox-close {
+    width: 50px;
+    height: 50px;
+    color: white;
+    position: absolute;
+    top: -80px;
+    right: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    transition: 400ms;
 }
 
 .title {
