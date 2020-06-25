@@ -1,5 +1,4 @@
 const express = require('express')
-const server = express
 const routes = express.Router()
 const multer = require("./config/middlewares/multer")
 const foodfyPublic = require("./app/public/controllers/foodfy")
@@ -42,8 +41,8 @@ routes.get("/admin/chefs/create", chefsAdmin.create)
 routes.get("/admin/chefs/:id", chefsAdmin.detail)
 routes.get("/admin/chefs/:id/edit", chefsAdmin.edit)
 
-routes.post("/admin/chefs", chefsAdmin.post)
-routes.put("/admin/chefs", chefsAdmin.put)
+routes.post("/admin/chefs", multer.array("image", 1), chefsAdmin.post)
+routes.put("/admin/chefs", multer.array("image", 1), chefsAdmin.put)
 routes.delete("/admin/chefs", chefsAdmin.delete)
 
 routes.use(function(req, res) {
