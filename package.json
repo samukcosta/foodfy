@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "main": "server.js",
   "scripts": {
-    "start": "npm-run-all -p nodemon browsersync",
+    "start": "node src/server.js",
+    "teste": "npm-run-all -p nodemon browsersync",
     "nodemon": "nodemon -e js,html,njk,json src/server.js",
     "browsersync": "browser-sync start --proxy http://localhost:8000 --files 'public, src/app/views' "
   },

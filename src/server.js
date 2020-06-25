@@ -16,6 +16,9 @@ nunjucks.configure('src/app/views',{
     autoescape: false,
     noCache: true
 })
-server.listen(8000, function(){
+
+let port = process.env.PORT || 8000
+
+server.listen(port, function(){
     console.log("server is runing")
 })
