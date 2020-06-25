@@ -1,8 +1,34 @@
 {% extends "public/layout.njk" %}
 
 {% block content %}
-    <div class="imgRecipe">
-        <img src="{{recipes.image}}" alt="Imagem do {{recipes.title}}">
+    <div class="container_img">
+        <div class="imgRecipe">
+            {% if not images %}
+                <img src="http://placehold.it/500x500?text=PRODUTO SEM FOTO" alt="SEM FOTO">
+            {%else%}
+                <img src="{{images[0].src}}" alt="{{images[0].name}}" onclick="Lightbox.open()">
+            {% endif %}
+            <div class="lightbox-target">
+                    <img src="{{images[0].src}}" alt="{{images[0].name}}">
+                    <a href="#" class="lightbox-close" onclick="Lightbox.close()">
+                        <span class="material-icons">close</span>
+                    </a>
+                </div>
+        </div>
+        <div class="gallery-preview">
+            {% for image in images %}
+                <img 
+                    src="{{image.src}}" 
+                    alt="{{image.name}}"
+                    {%if loop.index0 == 0 %}
+                        class="active"
+                    {%endif%}  
+                    onclick = "ImageGallery.setImage(event)"  
+                >
+            {% endfor %}
+
+        </div>
+
     </div>
 
     <div class="title">

@@ -1,9 +1,13 @@
 const ChefsPublic = require("../models/ChefsPublic")
 
 module.exports = {
-    index(req,res){
-        ChefsPublic.index(function(chefs){
-            return res.render("public/chefs", {chefs})
-        })
+    async index(req,res){
+        let results = await ChefsPublic.index()
+        const chefs = results.rows.map(file => ({
+            ...file,
+            src: `${req.protocol}://${req.headers.host}${file.path.replace("public", "")}`
+        }))
+
+        return res.render("public/chefs", {chefs})
     }
 }

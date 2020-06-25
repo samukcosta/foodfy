@@ -1,16 +1,22 @@
 const fs = require("fs")
 const RecipesPublic = require("../models/RecipesPublic")
 
-exports.index = function(req,res){
-    const {filter} = req.query
+module.exports = {
+    async index(req,res){
+        const {filter} = req.query
+    
+        let params = {}
+        if (filter) params = {filter}
+    
+        let results = await RecipesPublic.index(params)
+        const recipes = results.rows.map(file => ({
+            ...file,
+            src: `${req.protocol}://${req.headers.host}${file.path.replace("public", "")}`
+        }))
 
-    let params = {}
-    if (filter) params = {filter}
-
-    RecipesPublic.index(params, function(recipes){
         return res.render('public/index', {recipes})
-    })
-}
-exports.about = function(req,res){
-    return res.render('public/about')
+    },
+    about(req,res){
+        return res.render('public/about')
+    }
 }
