@@ -3,12 +3,12 @@
   "version": "1.0.0",
   "main": "server.js",
   "scripts": {
-    "start": "node src/server.js",
-    "test": "npm-run-all -p nodemon browsersync",
+    "start": "npm-run-all -p nodemon browsersync",
     "nodemon": "nodemon -e js,html,njk,json src/server.js",
     "browsersync": "browser-sync start --proxy http://localhost:8000 --files 'public, src/app/views' "
   },
   "dependencies": {
+    "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "method-override": "^3.0.0",
     "multer": "^1.4.2",
