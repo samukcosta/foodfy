@@ -46,12 +46,10 @@ module.exports = {
         results = await Files.findMainImageRecipes(chef.id)
         let recipes
 
-        if (results.rows.id != null) {
-            recipes = results.rows.map(file => ({
-                ...file,
-                src: `${req.protocol}://${req.headers.host}${file.path.replace("public", "")}`
-            }))
-        }
+        recipes = results.rows.map(file => ({
+            ...file,
+            src: `${req.protocol}://${req.headers.host}${file.path.replace("public", "")}`}
+            ))
 
         if (!chef) return res.send("Chef not fount")
         
