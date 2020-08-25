@@ -1,8 +1,8 @@
-const ChefsPublic = require("../models/ChefsPublic")
+const Chefs = require("../../admin/models/Users")
 
 module.exports = {
     async index(req,res){
-        let results = await ChefsPublic.index()
+        let results = await Chefs.allChefs()
         const chefs = results.rows.map(file => ({
             ...file,
             src: `${req.protocol}://${req.headers.host}${file.path.replace("public", "")}`
