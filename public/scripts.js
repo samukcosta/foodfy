@@ -16,6 +16,11 @@ for (menu of menuAdmin){
     if (currentPage.includes(menu.getAttribute("href"))){
         menu.classList.add("active")
     }
+    if (currentPage.includes('/admin/users/')){
+        if (menu.getAttribute("href").includes('/admin/users/profiles')){
+            menu.classList.add("active")
+        }
+    }
 }
 for (menu of menuPublic){
     if (currentPage.includes(menu.getAttribute("href"))) {
