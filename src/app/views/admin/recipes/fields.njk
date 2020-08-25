@@ -38,15 +38,24 @@
     </div>
 </div>
 
-<div class="itemRecipe">
-    <div class="titleCreated">Chef</div>
-    <select name="id_chef" id="chefs" placeholder="Selecione um chef">
-        
-        {% for chef in chefs %}
-            <option value="{{chef.id}}" {% if chef.id == recipe.pk_chef_id %}selected{% endif %}>{{chef.name}}</option>
-        {% endfor %}
-    </select>
-</div>
+{% if chefs %}
+    <div class="itemRecipe">
+        <div class="titleCreated">Chef</div>
+        <select name="id_chef" id="chefs" placeholder="Selecione um chef">
+            
+            {% for chef in chefs %}
+                <option value="{{chef.id}}" {% if chef.id == recipe.pk_chef_id %}selected{% endif %}>{{chef.name}}</option>
+            {% endfor %}
+        </select>
+    </div>
+{% else %}
+    <div class="itemRecipe">
+        <div class="titleCreated">Chef</div>
+        <select name="id_chef" id="chefs">
+            <option value="{{user.id}}" selected >{{user.name}}</option>
+        </select>
+    </div>
+{% endif %}
 
 <div class="itemRecipe">
     <div class="titleCreated">Ingredientes</div>

@@ -2,7 +2,7 @@
 
 {% block content %}
 <section class="manageRecipes">
-    <div class="headerManageRecipes">
+    <div class="headerManage">
         <h3>Gerenciar Receitas</h3>
         <a href="/admin/recipes/create" class="buttoncreate">Nova Receita</a>
     </div>
@@ -11,7 +11,7 @@
         {% for recipe in recipes %}
             <div class="recipeAdmin" id="{{recipe.id}}">
                 <div class="recipe_img_admin">
-                    <img src={{recipe.src}} alt="Imagem do {{recipe.title}}">
+                    <img src={{recipe.src}} alt="Imagem do {{recipe.title}}" onerror="this.onerror=null;this.src='../../../../../_img/no-photo.jpg'">                    
                 </div>
                 <div class="content">
                     <div class="recipe_content_admin">
