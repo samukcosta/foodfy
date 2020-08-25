@@ -24,7 +24,7 @@ module.exports = {
         
         return files.rows
     },
-    async createFileChef(filename, path){
+    async createFileUser(filename, path){
         const query = `
             INSERT INTO files (
                 name,
@@ -40,33 +40,33 @@ module.exports = {
 
         return await db.query(query, values)
     },
-    findAvatarChef(id){
+    findAvatarUser(id){
         return db.query(`SELECT * FROM files WHERE id = $1`, [id])
     },
     async findMainImageAllRecipes(){
         return await db.query(`SELECT 
         DISTINCT ON (recipes.id) recipes.id, recipes.title, 
-        chefs.name,
-        files.id AS id_files, files.name AS name_files, files.path FROM recipes
-        LEFT JOIN chefs ON (recipes.pk_chef_id = chefs.id)
+        users.name,
+        files.id AS id_files, files.name AS name_files, COALESCE (files.path, 'sem_image') AS path FROM recipes
+        LEFT JOIN users ON (recipes.pk_user_id = users.id)
         LEFT JOIN recipe_files ON (recipe_files.recipe_id = recipes.id )
         LEFT JOIN files ON (files.id = recipe_files.file_id )
         ORDER BY recipes.id ASC`)
     },
     findMainImageRecipes(id){
         return db.query(`SELECT 
-        DISTINCT ON (recipes.id) recipes.id, recipes.title, 
-        files.id AS id_files, files.name AS name_files, files.path FROM chefs
-        LEFT JOIN recipes ON (recipes.pk_chef_id = chefs.id)
+        DISTINCT ON (recipes.id) recipes.id, recipes.title, users.name, 
+        files.id AS id_files, files.name AS name_files, COALESCE (files.path, 'sem_image') AS path FROM users
+        LEFT JOIN recipes ON (recipes.pk_user_id = users.id)
         LEFT JOIN recipe_files ON (recipe_files.recipe_id = recipes.id )
         LEFT JOIN files ON (files.id = recipe_files.file_id )
-        WHERE chefs.id = $1 ORDER BY recipes.id ASC`, [id])
+        WHERE users.id = $1 ORDER BY recipes.id ASC`, [id])
     },
     async findAllImageRecipes(id){
         const query = `SELECT 
         recipes.id AS id_recipes, recipes.title, 
-        files.id AS id_files, files.name AS name_files, files.path FROM chefs
-        LEFT JOIN recipes ON (recipes.pk_chef_id = chefs.id)
+        files.id AS id_files, files.name AS name_files, COALESCE (files.path, 'sem_image') AS path FROM users
+        LEFT JOIN recipes ON (recipes.pk_user_id = users.id)
         LEFT JOIN recipe_files ON (recipe_files.recipe_id = recipes.id )
         LEFT JOIN files ON (files.id = recipe_files.file_id )
         WHERE recipes.id = $1 ORDER BY recipes.id ASC`
