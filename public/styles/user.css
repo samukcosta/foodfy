@@ -1,0 +1,128 @@
+.mainAdmin .user.container {
+    position: relative;
+    box-sizing: border-box;
+    width: 1000px;
+}
+
+.mainAdmin .user.container button {
+    position: absolute;
+    width: 140px;
+    margin: none;
+    top: 0px;
+    right: 140px;
+    display: block;
+}
+
+.mainAdmin .user.container button[type="submit"]:hover {
+    background-color: #4837c4f5;
+}
+
+section.user.container .usersForm .cancel {
+    position: absolute;
+    background-color: #8A8A8A;
+    border-radius: 4px;
+    padding: 9px 20px;
+    text-align: center;
+    width: 100px;
+    margin: 0;
+    top: 0;
+    right: -16px;
+    display: block;
+    text-decoration: none;
+    color: white;
+    font-weight: bold;
+}
+
+section.user.container .usersForm .cancel:hover {
+    background-color: #666565;
+}
+
+.mainAdmin .user.container form .dataUser{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+}
+
+.mainAdmin .user.container p{
+    font-weight: bold;
+    color: #111111;
+    font-size: 16px;
+    line-height: 19px;
+    margin-bottom: 10px;
+}
+
+.mainAdmin .user.container input {
+    width: 100%;
+    margin-bottom: 30px;
+    font-size: 16px;
+    line-height: 19px;
+}
+
+.mainAdmin .user.container .fields .password {
+    width: 48%;
+}
+
+section.user.container .usersForm .checkAdmin {
+    display: flex;
+    align-items: center;
+}
+
+section.user.container .usersForm input[type='checkbox'] {
+    width: 15px;
+    background-color: #FFFFFF;
+    border: 1px solid #DDDDDD;
+    border-radius: 4px;
+    margin: 0;
+    margin-right: 8px;
+}
+
+section.user.container .usersForm .checkAdmin p {
+    margin: 0;
+}
+
+.chefs .card_chef .buttonsProfile {
+    display: flex;
+    flex-direction: row;
+    gap: 16px;
+    align-items: center;
+    justify-content: start;
+    margin-top: 16px;
+}
+
+.buttonsProfile a {
+    font-weight: bold;
+    color: #6558C3;
+    font-size: 14px;
+    line-height: 17px;
+    text-decoration: none;
+}
+
+.buttonsProfile button {
+    font-weight: bold;
+    color: #F55A5A;
+    font-size: 14px;
+    line-height: 17px;
+    border: none;
+    background: none;
+	padding: 0;
+    cursor: pointer;
+    margin: 0;
+}
+
+.mainAdmin .user.container .createbutton {
+    right: 140px;
+}
+
+.mainAdmin .user.container button {
+    right: 0;
+    margin-left: 12px;
+}
+
+section.user.container .headerUsers .delete {
+    right: 155px;
+    background-color: #DC4747;
+}
+
+section.user.container .headerUsers .delete:hover {
+    background-color: #cc3535;
+}
