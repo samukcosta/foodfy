@@ -1,0 +1,59 @@
+{% extends "../layout.njk" %}
+
+{% block content %}
+<section class="user container form">
+    <div class="headerUsers">
+        <h3>Criar Usuário</h3>
+        <form action="/admin/users/profiles?_method=DELETE" method="post">
+            <input type="hidden" name="id" value="{{profile.id}}">
+            <button class="delete" type="submit" >Deletar</button>
+        </form>
+    </div>
+    <form action="/admin/users/profiles?_method=PUT" class="usersForm" method="POST">
+        <button class='salvar' type="submit">Salvar</button>
+
+        <div class="dataUser">
+            <div class="fields">
+                <div class="item">
+                    <p>Nome</p>
+                    <div class="input">
+                        <input type="text" 
+                        name="name" 
+                        placeholder="Digite seu nome" 
+                        value="{{profile.name}}"
+                    >
+                    </div>
+                </div>
+            </div>
+
+            <div class="fields">
+                <div class="item">
+                    <p>Email</p>
+                    <div class="input">
+                        <input type="email" 
+                        name="email" 
+                        placeholder="Digite seu email" 
+                        value="{{profile.email}}"
+                        onblur="Validate.apply(this, 'isEmail')"
+                    >
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="checkAdmin">
+            <input type="checkbox" name="admin" value="true" {% if profile.is_admin == true %}checked{% endif %}>
+            <p>Administrador</p>
+        </div>
+        <div class="checkAdmin">
+            <input type="checkbox" name="chef" value="true" {% if profile.is_chef == true %}checked{% endif %}>
+            <p>Chef</p>
+        </div>
+        <input type="hidden" name="id" value="{{profile.id}}">
+    </form>
+</section>
+
+
+
+{% endblock content %}
+

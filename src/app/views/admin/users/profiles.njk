@@ -1,0 +1,29 @@
+{% extends "admin/layout.njk" %}
+
+{% block content %}
+    <div class="headerManage">
+        <h3>Gerenciar Usuários</h3>
+        <a href="/admin/users/register" class="buttoncreate">Novo Usuário</a>
+    </div>
+<section class="chefs">
+    {% for profile in profiles %}
+        <div class="card_chef">
+            <img src="{{profile.src}}" alt="Imagem do usuário {{profile.name}}" onerror="this.onerror=null;this.src='../../../../../_img/user.png'">
+            <div>
+                <div>
+                    <h4>{{profile.name}}</h4>
+                    <p>{{profile.email}}</p>
+                </div>
+                <div class="buttonsProfile">
+                    <a href="/admin/users/{{profile.id}}">Editar</a>
+                    <form action="/admin/users/profiles?_method=DELETE" method="post">
+                        <input type="hidden" name="id" value="{{profile.id}}">
+                        <button type="submit" >Remover</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+</section>
+{% endblock content %}
+<p>PÁGINA DOS CHEFS</p> 

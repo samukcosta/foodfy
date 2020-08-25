@@ -1,0 +1,53 @@
+{% extends "../layout.njk" %}
+
+{% block content %}
+<section class="user container form">
+    <div class="headerUsers">
+        <h3>Criar Usuário</h3>
+    </div>
+    <form action="/admin/users/register" class="usersForm" method="POST">
+        <button class='createbutton' type="submit">Salvar</button>
+        <a class="cancel" href="/">Cancelar</a>
+
+        <div class="dataUser">
+            <div class="fields">
+                <div class="item">
+                    <p>Nome</p>
+                    <div class="input">
+                        <input type="text" 
+                        name="name" 
+                        placeholder="Digite seu nome" 
+                    >
+                    </div>
+                </div>
+            </div>
+
+            <div class="fields">
+                <div class="item">
+                    <p>Email</p>
+                    <div class="input">
+                        <input type="email" 
+                        name="email" 
+                        placeholder="Digite seu email" 
+                        onblur="Validate.apply(this, 'isEmail')"
+                    >
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="checkAdmin">
+            <input type="checkbox" name="admin" value="true" {% if user.admin == 'true' %}checked{% endif %}>
+            <p>Administrador</p>
+        </div>
+        <div class="checkAdmin">
+            <input type="checkbox" name="chef" value="true" {% if user.chef == 'true' %}checked{% endif %}>
+            <p>Chef</p>
+        </div>
+    </form>
+</section>
+
+
+
+{% endblock content %}
+

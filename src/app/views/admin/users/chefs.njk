@@ -1,0 +1,16 @@
+{% extends "admin/layout.njk" %}
+
+{% block content %}
+<section class="chefs">
+    {% for chef in chefs %}
+        <div class="card_chef">
+            <img src="{{chef.src}}" alt="Imagem do chef {{chef.name}}" onerror="this.onerror=null;this.src='../../../../../_img/chef.png'">
+            <div>
+                <h4>{{chef.name}}</h4>
+                <p>{% if chef.recipes_chef == 0 or chef.recipes_chef == 1 %}{{chef.recipes_chef}} Receita {% else %} {{chef.recipes_chef}} Receitas{% endif %}</p>
+            </div>
+        </div>
+    {% endfor %}
+</section>
+{% endblock content %}
+<p>PÁGINA DOS CHEFS</p> 
