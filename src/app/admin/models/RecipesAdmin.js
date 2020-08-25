@@ -12,7 +12,7 @@ module.exports = {
     },
     create(data){
         const query = `INSERT INTO recipes (
-            pk_chef_id,
+            pk_user_id,
             title,
             ingredients,
             preparation,
@@ -34,20 +34,22 @@ module.exports = {
         return db.query(query, values)
     },
     chefSelectOptions(){
-        return db.query(`SELECT id, name FROM chefs
-        ORDER BY name ASC`)
+        return db.query(`SELECT id, name FROM users
+        WHERE is_chef = true
+        ORDER BY name ASC
+        `)
     },
     find(id){
-        const query = `SELECT recipes.*, chefs.name AS chef 
+        const query = `SELECT recipes.*, users.name AS chef 
         FROM recipes
-        LEFT JOIN chefs ON (recipes.pk_chef_id = chefs.id)
+        LEFT JOIN users ON (recipes.pk_user_id = users.id)
         WHERE recipes.id = $1`
 
         return db.query(query, [id])
     },
     update(data){
         query = `UPDATE recipes
-        SET pk_chef_id = $1,
+        SET pk_user_id = $1,
             title = $2,
             ingredients = $3,
             preparation = $4,
