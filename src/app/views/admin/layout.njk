@@ -2,8 +2,8 @@
 
 <html>
     <head>
-        <title>Foodfy</title>
-        <link rel="stylesheet" href="/styles.css">
+        <title>Foodfy - Admin</title>
+        {%include 'parts/stylesAdmin.njk'%}
     </head>
 
     <body>
@@ -11,8 +11,18 @@
             <img src="/_img/logo_admin.png" alt="Logo Foodfy">
             <a href="/admin/recipes">RECEITAS</a>
             <a href="/admin/chefs">CHEFS</a>
+            {% if user.is_admin == true %}<a href="/admin/users/profiles">USUÁRIOS</a>{% endif %}
+            <a href="/admin/profile">PERFIL</a>
+            <a href="#">
+                <form action="/admin/logout" method="POST">
+                    <button class='logout'>SAIR</button>
+                </form>
+            </a>
         </header>
         <div class="mainAdmin">
+            
+            {%include "parts/messages.njk"%}
+
             {% block content %}
             {% endblock content %}
         </div>
