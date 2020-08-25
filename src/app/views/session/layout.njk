@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>Foodfy - login</title>
+        {%include 'parts/stylesAdmin.njk'%}
+    </head>
+
+    <body>
+        <div class="mainSession">
+            
+            <header id="loginHeader">
+                <div class="links">
+                    <a href="/foodfy"><img src="/_img/logo.png" alt="Logo Foodfy"></a>
+                </div>             
+
+                {%include "parts/messages.njk"%}
+
+            </header>
+
+            {% block content %}
+            {% endblock content %}
+        </div>
+
+        <script src="/scripts.js"></script>
+    </body>
+</html>
