@@ -1,15 +1,19 @@
-const ChefsAdmin = require("../models/ChefsAdmin")
+const User = require("../models/Users")
 const Files = require("../models/Files")
 
 module.exports = {
     async index(req, res){
-        let results = await ChefsAdmin.all()
+        let results = await User.allChefs()
+
+        const {userID: id} = req.session
+        const user = await User.findOne({where: {id} })
+        
         const chefs = results.rows.map(file => ({
             ...file,
             src: `${req.protocol}://${req.headers.host}${file.path.replace("public", "")}`
         }))
 
-        return res.render("admin/chefs/index", {chefs})
+        return res.render("admin/users/chefs", {chefs, user})
     },
     create(req, res){
         return res.render("admin/chefs/create")
@@ -34,13 +38,13 @@ module.exports = {
         let results = await Files.createFileChef(filename, path)
         const idFile = results.rows[0].id
 
-        await ChefsAdmin.create(req.body, idFile)
+        await User.create(req.body, idFile)
 
         return res.redirect("/admin/chefs/")
     },
     async detail(req,res){
 
-        let results = await ChefsAdmin.find(req.params.id)
+        let results = await User.find(req.params.id)
         const chef = results.rows[0]
 
         results = await Files.findMainImageRecipes(chef.id)
@@ -65,7 +69,7 @@ module.exports = {
     },
     async edit(req, res){
 
-        let results = await ChefsAdmin.find(req.params.id)
+        let results = await User.find(req.params.id)
         const chef = results.rows[0]
         
         if (!chef) return res.render("Chef not find")
@@ -97,7 +101,7 @@ module.exports = {
             idFile = results.rows[0].id  
         }
 
-        await ChefsAdmin.update(req.body, idFile)
+        await User.update(req.body, idFile)
 
         if (req.body.removed_files) {
             const idRemoved = req.body.removed_files
@@ -110,11 +114,11 @@ module.exports = {
     },
     async delete(req,res){
 
-        let results = await ChefsAdmin.find(req.body.id)
+        let results = await User.find(req.body.id)
         const idFiles = results.rows[0].pk_files_id
         console.log(idFiles)
 
-        ChefsAdmin.delete(req.body.id)
+        User.delete(req.body.id)
 
         Files.delete(idFiles)
 

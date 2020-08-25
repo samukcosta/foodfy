@@ -1,27 +1,51 @@
 const RecipesAdmin = require("../models/RecipesAdmin")
 const Files = require("../models/Files")
 const {lineBreak} = require("../../../lib/utils")
-const ChefsAdmin = require("../models/ChefsAdmin")
+const User = require("../models/Users")
 const Recipe_Files = require("../models/Recipe_Files")
 
 /*ADMIN*/
 
 module.exports = {
     async index(req,res){
-        let results = await Files.findMainImageAllRecipes()
-        const recipes = results.rows.map(file => ({
-            ...file,
-            src: `${req.protocol}://${req.headers.host}${file.path.replace("public", "")}`
-        }))
+        const {userID: id} = req.session
+        const user = await User.findOne({where: {id} })
+        let results
+        let recipes
 
-        return res.render('admin/recipes/index', {recipes})
+        if (user.is_admin == true) {
+            results = await Files.findMainImageAllRecipes()
+            if (results.rows[0].id != null) {
+                recipes = results.rows.map(file => ({
+                    ...file,
+                    src: `${req.protocol}://${req.headers.host}${file.path.replace("public", "")}`
+                }))
+            }
+            
+        } else {
+            results = await Files.findMainImageRecipes(user.id)
+            if (results.rows[0].id != null) {
+                recipes = results.rows.map(file => ({
+                    ...file,
+                    src: `${req.protocol}://${req.headers.host}${file.path.replace("public", "")}`
+                }))
+            }
+        }
+
+        return res.render('admin/recipes/index', {recipes, user})
 
     },
     async create(req,res){
-        let results = await RecipesAdmin.chefSelectOptions()
-        const chefs = results.rows
+        const {userID: id} = req.session
+        const user = await User.findOne({where: {id} })
+        let chefs
 
-        return res.render('admin/recipes/create', {chefs})
+        if (user.is_admin == true){
+            let results = await RecipesAdmin.chefSelectOptions()
+            chefs = results.rows
+        }
+        
+        return res.render('admin/recipes/create', {chefs, user})
 
     },
     async post(req,res){
@@ -30,7 +54,7 @@ module.exports = {
 
         for (key of keys) {
             if (req.body[key] == "" && (key != "information") ) {
-                return res.send("Please, fill all fields")
+                return res.render("Please, fill all fields")
             }
         }
 
@@ -55,44 +79,86 @@ module.exports = {
     },
     async detail(req, res) {
 
+        const {userID: id} = req.session
+        const user = await User.findOne({where: {id} })
+
+        let results, recipe, files
+
         results = await RecipesAdmin.find(req.params.id)
-        const recipe = results.rows[0]
+        recipe = results.rows[0]
 
         if (!recipe) return res.send("Recipe not found!")
 
-        recipe.information = lineBreak(recipe.information).fh
+        if (user.is_admin == true) {
+            recipe.information = lineBreak(recipe.information).fh
 
-        results = await Files.findAllImageRecipes(recipe.id)
-        const files = results.rows.map(file => ({
-            ...file,
-            src: `${req.protocol}://${req.headers.host}${file.path.replace("public", "")}`
-        }))
+            results = await Files.findAllImageRecipes(recipe.id)
+            files = results.rows.map(file => ({
+                ...file,
+                src: `${req.protocol}://${req.headers.host}${file.path.replace("public", "")}`
+            }))
+        } else {
+            if (user.id == recipe.pk_user_id) {
+                recipe.information = lineBreak(recipe.information).fh
 
-        results = await ChefsAdmin.find(recipe.pk_chef_id)
-        const chefs = results.rows
+                results = await Files.findAllImageRecipes(recipe.id)
+                files = results.rows.map(file => ({
+                    ...file,
+                    src: `${req.protocol}://${req.headers.host}${file.path.replace("public", "")}`
+                }))
+            } else {
+                return res.render('admin/users/index', {
+                    user,
+                    error: 'Esta receita não é sua. Você não tem permissão para olhar.',
+                })
+            }
+        }
 
-        return res.render("admin/recipes/recipeDetail", {recipe, files, chefs})
+        return res.render("admin/recipes/recipeDetail", {recipe, files, user})
 
     },
     async edit(req,res){
 
+        const {userID: id} = req.session
+        const user = await User.findOne({where: {id} })
+
+        let chefs, files
+
         let results = await RecipesAdmin.find(req.params.id)
-        const recipe = results.rows[0]
+        let recipe = results.rows[0]
 
-        if(!recipe) return res.render("Recipe not find")
+        if (user.is_admin == true){
 
-        results = await RecipesAdmin.chefSelectOptions()
-        chefs = results.rows
+            if(!recipe) return res.render("Recipe not find")
+    
+            results = await RecipesAdmin.chefSelectOptions()
+            chefs = results.rows
+    
+            recipe.information = lineBreak(recipe.information).fu
+    
+            results = await Files.findAllImageRecipes(recipe.id)
+            files = results.rows.map(file => ({
+                ...file,
+                src: `${req.protocol}://${req.headers.host}${file.path.replace("public", "")}`
+            }))
+        } else {
 
-        recipe.information = lineBreak(recipe.information).fu
+            if (user.id == recipe.pk_user_id) {
+                if(!recipe) return res.render("Recipe not find")
+        
+                recipe.information = lineBreak(recipe.information).fu
+        
+                results = await Files.findAllImageRecipes(recipe.id)
+                files = results.rows.map(file => ({
+                    ...file,
+                    src: `${req.protocol}://${req.headers.host}${file.path.replace("public", "")}`
+                }))
+            }
+        }
 
-        results = await Files.findAllImageRecipes(recipe.id)
-        const files = results.rows.map(file => ({
-            ...file,
-            src: `${req.protocol}://${req.headers.host}${file.path.replace("public", "")}`
-        }))
+        
 
-        return res.render(`admin/recipes/edit`, {recipe, chefs, files})
+        return res.render(`admin/recipes/edit`, {recipe, chefs, files, user})
          
     },
     async put(req,res){
