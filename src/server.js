@@ -7,6 +7,8 @@ const session = require('./config/session')
 
 const server = express()
 
+server.use(express.cookieParser(''));
+server.use(express.session());
 server.use(cors())
 server.use(session)
 server.use((req,res,next) => {
