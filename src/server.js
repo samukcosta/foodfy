@@ -8,7 +8,9 @@ const cookieParser = require('cookie-parser')
 
 const server = express()
 
-server.use(cookieParser(''));
+const sessionSecret = 'valuesecretsession'
+
+server.use(cookieParser(sessionSecret));
 server.use(cors())
 server.use(session)
 server.use((req,res,next) => {
