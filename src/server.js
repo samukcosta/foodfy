@@ -4,11 +4,11 @@ const routes = require('./routes')
 const cors = require('cors')
 const methodOverride = require('method-override')
 const session = require('./config/session')
+const cookieParser = require('cookie-parser')
 
 const server = express()
 
-server.use(express.cookieParser(''));
-server.use(express.session());
+server.use(cookieParser(''));
 server.use(cors())
 server.use(session)
 server.use((req,res,next) => {
