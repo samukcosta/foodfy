@@ -130,5 +130,5 @@ Este projeto está sob a licença **MIT**. Veja o arquivo [LICENSE](./LICENSE) p
 Feito com ❤️ por **Samuel Costa** 👋🏽
 
 [![Linkedin Badge](https://img.shields.io/badge/-Samuel%20Costa-blue?style=flat-square&logo=Linkedin&logoColor=white&link=https://www.linkedin.com/in/costa-samuel/)](https://www.linkedin.com/in/costa-samuel/)
-[![Gmail Badge](https://img.shields.io/badge/-samuelcosta@email.com-c14438?style=flat-square&logo=Gmail&logoColor=white&link=mailto:samuelcosta@email.com)](mailto:samuelcosta@email.com)
+[![Gmail Badge](https://img.shields.io/badge/-samuelcosta@email.com-c14438?style=flat-square&logo=Gmail&logoColor=white&link=mailto:samu.ks@outlook.com)](mailto:samu.ks@outlook.com)
 
